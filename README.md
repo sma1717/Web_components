@@ -29,23 +29,34 @@ media-viewer/
 │   ├── media-data.js       # Media item data
 │   └── utilities.js        # Common utility functions
 ├── server/                 # Server for local development
-│   └── new-server.js       # Node.js server
+│   ├── server.js           # Node.js server
+│   └── assets/             # Media assets (videos, images)
 ├── styles/                 # CSS styles
 │   └── main.css            # Main stylesheet
 ├── about.html              # About page
+├── index.html              # Redirect to main application
 ├── media-viewer-demo.html  # Main application page
+├── video-player-test.html  # Test page for video player
+├── package.json            # Project configuration
 └── README.md               # Project documentation
 ```
 
 ## Getting Started
 
 1. Clone the repository
-2. Start the server: `node server/new-server.js`
-3. Open `http://localhost:1122/media-viewer-demo.html` in your browser
+2. Install dependencies (if any): `npm install`
+3. Start the server: `npm start` or `node server/server.js`
+4. Open `http://localhost:1122/` in your browser
+
+## Application Pages
+
+- **Main Application:** http://localhost:1122/media-viewer-demo.html
+- **About Page:** http://localhost:1122/about.html
+- **Video Player Test:** http://localhost:1122/video-player-test.html
 
 ## Supported Media Formats
 
-- **Video:** MP4, WebM, Ogg
+- **Video:** MP4, WebM, Ogg, MOV
 - **Images:** JPEG, PNG, GIF, WebP
 - **Sources:** Local files, remote URLs
 
@@ -56,6 +67,28 @@ media-viewer/
 - **CSS3:** Advanced styling with CSS variables for theming
 - **HTML5:** Semantic markup for accessibility and SEO
 - **Node.js:** Server for local development and asset serving
+
+## Key Utilities
+
+The project includes several utility functions in `js/utilities.js`:
+
+- **toggleDarkMode:** Switch between dark and light modes
+- **formatTime:** Convert seconds to MM:SS format
+- **isUrlFromDomain:** Check if a URL belongs to a specific domain
+- **getFileExtension:** Extract file extension from a path
+- **debounce:** Limit how often a function can be called
+- **notifyMediaChanged:** Dispatch event when media changes
+- **initDarkMode:** Initialize dark mode based on saved preference
+
+## Media Data Management
+
+Media items are managed in `js/media-data.js` with these methods:
+
+- **getAllItems:** Get all media items
+- **getItemsByCategory:** Filter items by category
+- **getItemsByType:** Filter items by type (videos/images)
+- **searchItems:** Search items by name or description
+- **getItemById:** Get a specific item by ID
 
 ## How to Extend & Customize
 

@@ -213,7 +213,7 @@ class VideoPlayer extends HTMLElement {
     // Store current time and playing state
     const wasPlaying = !this.video.paused;
     const currentTime = this.video.currentTime;
-debugger;
+
     // Handle both online and local sources
     const isUrl = this._src.startsWith('https') || this._src.startsWith('http') || this._src.startsWith('blob') || this._src.startsWith('//');
     
