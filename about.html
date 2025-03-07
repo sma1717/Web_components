@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Media Viewer</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>About Media Viewer</h1>
+      <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
+    </header>
+    
+    <div class="about-container">
+      <section class="about-section">
+        <h2>Project Overview</h2>
+        <p>Media Viewer is a modern, web-based application designed to provide a seamless experience for viewing and managing various media types. Built with web components and modern JavaScript, it offers a responsive, customizable interface for browsing and playing videos and viewing images.</p>
+        <p>This project demonstrates the power of web components for creating reusable, encapsulated UI elements that can be easily integrated into any web application.</p>
+      </section>
+      
+      <section class="about-section">
+        <h2>Project Goals</h2>
+        <p>The Media Viewer was developed with the following goals in mind:</p>
+        <ul class="feature-list">
+          <li>Create a modular, component-based media player that can be easily extended</li>
+          <li>Provide a consistent user experience across different media types</li>
+          <li>Implement responsive design principles for optimal viewing on any device</li>
+          <li>Demonstrate best practices in modern web development</li>
+          <li>Build a foundation that can be easily customized and extended</li>
+        </ul>
+      </section>
+      
+      <section class="about-section">
+        <h2>Features & Capabilities</h2>
+        <ul class="feature-list">
+          <li><strong>Media Organization:</strong> Categorized sidebar with collapsible sections for easy navigation</li>
+          <li><strong>Video Playback:</strong> Full-featured video player with playback controls, volume adjustment, and seeking</li>
+          <li><strong>Image Viewing:</strong> High-quality image display with zoom capabilities</li>
+          <li><strong>Dark Mode:</strong> Toggle between light and dark themes for comfortable viewing in any environment</li>
+          <li><strong>Keyboard Shortcuts:</strong> Navigate and control media playback using keyboard shortcuts</li>
+          <li><strong>Right-Click Menu:</strong> Context-sensitive menu for quick access to common actions</li>
+          <li><strong>Responsive Design:</strong> Optimized for desktop, tablet, and mobile devices</li>
+          <li><strong>Search Functionality:</strong> Filter media items by name or description</li>
+        </ul>
+      </section>
+      
+      <section class="about-section">
+        <h2>Supported Media Formats</h2>
+        <ul class="format-list">
+          <li><strong>Video:</strong> MP4, WebM, Ogg</li>
+          <li><strong>Images:</strong> JPEG, PNG, GIF, WebP</li>
+          <li><strong>Sources:</strong> Local files, remote URLs</li>
+        </ul>
+      </section>
+      
+      <section class="about-section">
+        <h2>Future Enhancements Plan</h2>
+        <ul class="feature-list">
+          <li>Audio player component for music and podcasts</li>
+          <li>PDF viewer for documents</li>
+          <li>Playlist creation and management</li>
+          <li>User accounts and preferences</li>
+          <li>Media sharing capabilities</li>
+          <li>Advanced filtering and sorting options</li>
+          <li>Customizable themes and layouts</li>
+          <li>Integration with cloud storage services</li>
+        </ul>
+      </section>
+      
+      <section class="about-section">
+        <h2>Technology Stack</h2>
+        <ul class="tech-list">
+          <li><strong>Web Components:</strong> Custom elements for encapsulated, reusable UI components</li>
+          <li><strong>JavaScript:</strong> Modern ES6+ features for clean, maintainable code</li>
+          <li><strong>CSS3:</strong> Advanced styling with CSS variables for theming</li>
+          <li><strong>HTML5:</strong> Semantic markup for accessibility and SEO</li>
+          <li><strong>Node.js:</strong> Server for local development and asset serving</li>
+        </ul>
+      </section>
+      
+      <section class="about-section">
+        <h2>How to Extend & Customize</h2>
+        <p>The Media Viewer is designed to be easily extended and customized:</p>
+        <ol>
+          <li><strong>Add New Components:</strong> Create new web components by extending existing ones or building from scratch</li>
+          <li><strong>Customize Styling:</strong> Modify CSS variables in the main stylesheet or component-specific styles</li>
+          <li><strong>Add Media Types:</strong> Implement new media handlers by following the established pattern</li>
+          <li><strong>Extend Functionality:</strong> Add new features by creating new components or enhancing existing ones</li>
+          <li><strong>Integration:</strong> Easily integrate with other web applications using the component-based architecture</li>
+        </ol>
+      </section>
+      
+      <a href="media-viewer-demo.html" class="back-button">Back to Media Viewer</a>
+    </div>
+    
+    <footer>
+      <p>&copy; 2025 Media Viewer</p>
+    </footer>
+  </div>
+  
+  <script src="js/utilities.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize dark mode
+      MediaViewerUtils.initDarkMode();
+      
+      // Set up dark mode toggle
+      const darkModeToggle = document.getElementById('dark-mode-toggle');
+      darkModeToggle.addEventListener('click', () => {
+        MediaViewerUtils.toggleDarkMode();
+      });
+    });
+  </script>
+</body>
+</html> 

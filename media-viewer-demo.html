@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Viewer Demo</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Media Viewer</h1>
+      <div>
+        <a href="about.html" class="about-link">About</a>
+        <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
+      </div>
+    </header>
+    
+    <div class="media-viewer-container">
+      <div class="sidebar-wrapper">
+        <media-sidebar id="media-sidebar"></media-sidebar>
+      </div>
+      
+      <div class="viewer-wrapper">
+        <div class="media-container" id="media-container">
+          <!-- Media viewer will be inserted here dynamically -->
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      <p>&copy; 2025 Media Viewer</p>
+    </footer>
+  </div>
+  
+  <!-- Right-click menu component -->
+  <right-click-menu id="right-click-menu" target="#media-container > *"></right-click-menu>
+  
+  <!-- Shortcut handler component -->
+  <shortcut-handler id="shortcut-handler" target="#media-container > video-player" skip-forward-seconds="10" skip-backward-seconds="10"></shortcut-handler>
+  
+  <!-- Load components -->
+  <script src="components/media-base/media-base.js"></script>
+  <script src="components/video-player/video-player.js"></script>
+  <script src="components/video-controls/video-controls.js"></script>
+  <script src="components/image-viewer/image-viewer.js"></script>
+  <script src="components/media-sidebar/media-sidebar.js"></script>
+  <script src="components/right-click-menu/right-click-menu.js"></script>
+  <script src="components/shortcut-handler/shortcut-handler.js"></script>
+  
+  <!-- Load utilities and data -->
+  <script src="js/utilities.js"></script>
+  <script src="js/media-data.js"></script>
+  
+  <script>
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get references to elements
+      const mediaSidebar = document.getElementById('media-sidebar');
+      const mediaContainer = document.getElementById('media-container');
+      const darkModeToggle = document.getElementById('dark-mode-toggle');
+      const rightClickMenu = document.getElementById('right-click-menu');
+      const shortcutHandler = document.getElementById('shortcut-handler');
+      
+      // Initialize dark mode
+      const isDarkMode = MediaViewerUtils.initDarkMode();
+      
+      // Set up dark mode toggle
+      darkModeToggle.addEventListener('click', () => {
+        const isDarkMode = MediaViewerUtils.toggleDarkMode();
+        
+        // Update components
+        const activeViewer = mediaContainer.firstElementChild;
+        if (activeViewer) {
+          activeViewer.setAttribute('dark-mode', isDarkMode.toString());
+        }
+        
+        mediaSidebar.setAttribute('dark-mode', isDarkMode.toString());
+        rightClickMenu.setAttribute('dark-mode', isDarkMode.toString());
+        shortcutHandler.setAttribute('dark-mode', isDarkMode.toString());
+      });
+      
+      // Set media items to sidebar
+      console.log('Setting media items to sidebar:', MediaData.getAllItems().length);
+      mediaSidebar.setMediaItems(MediaData.getAllItems());
+      
+      // Listen for media selection
+      mediaSidebar.addEventListener('media-selected', (event) => {
+        const mediaItem = event.detail;
+        loadMediaItem(mediaItem);
+      });
+      
+      // Set right-click menu target
+      rightClickMenu.setAttribute('target', '#media-container > *');
+      
+      // Load the first media item by default
+      const allItems = MediaData.getAllItems();
+      if (allItems.length > 0) {
+        setTimeout(() => {
+          console.log('Setting initial active media item:', allItems[0].id);
+          mediaSidebar.setActiveItem(allItems[0].id);
+          loadMediaItem(allItems[0]);
+        }, 300);
+      }
+      
+      // Function to load a media item
+      function loadMediaItem(item) {
+        console.log(`Loading media item: ${item.name} (${item.type})`);
+        
+        // Clear the container
+        mediaContainer.innerHTML = '';
+        
+        // Create the appropriate viewer based on media type
+        let viewer;
+        
+        if (item.type === 'videos') {
+          // Create video player with proper attributes
+          viewer = document.createElement('video-player');
+          viewer.setAttribute('src', item.src);
+          
+          if (item.format) {
+            viewer.setAttribute('format', item.format);
+          }
+          
+          // Add video controls
+          const controls = document.createElement('video-controls');
+          viewer.appendChild(controls);
+          
+          // Set dark mode if active
+          if (document.body.classList.contains('dark-mode')) {
+            viewer.setAttribute('dark-mode', 'true');
+          }
+          
+          // Add to container
+          mediaContainer.appendChild(viewer);
+          
+          // Update shortcut handler for videos
+          setTimeout(() => {
+            shortcutHandler.setAttribute('target', '#media-container > video-player');
+            console.log('Updated shortcut handler target for video');
+            
+            // Update right-click menu target
+            rightClickMenu.setAttribute('target', '#media-container > video-player');
+            console.log('Updated right-click menu target for video');
+          }, 100);
+        } else if (item.type === 'images') {
+          // Create image viewer with proper attributes
+          viewer = document.createElement('image-viewer');
+          viewer.setAttribute('src', item.src);
+          
+          if (item.alt) {
+            viewer.setAttribute('alt', item.alt);
+          }
+          
+          // Set dark mode if active
+          if (document.body.classList.contains('dark-mode')) {
+            viewer.setAttribute('dark-mode', 'true');
+          }
+          
+          // Add to container
+          mediaContainer.appendChild(viewer);
+          
+          // Remove shortcut handler target for images
+          shortcutHandler.setAttribute('target', '');
+          
+          // Update right-click menu target
+          setTimeout(() => {
+            rightClickMenu.setAttribute('target', '#media-container > image-viewer');
+            console.log('Updated right-click menu target for image');
+          }, 100);
+        }
+        
+        // Notify that media has changed
+        setTimeout(() => {
+          MediaViewerUtils.notifyMediaChanged(item);
+        }, 200);
+      }
+    });
+  </script>
+</body>
+</html> 

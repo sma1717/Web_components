@@ -1,0 +1,157 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+.video-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: #000;
+}
+
+.center-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 5;
+}
+
+.center-play-button svg {
+  width: 40px;
+  height: 40px;
+  fill: white;
+}
+
+.video-container:hover .center-play-button {
+  opacity: 0.7;
+}
+
+.center-play-button:hover {
+  opacity: 1 !important;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.center-play-button.hidden {
+  display: none;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 4;
+}
+
+.video-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  z-index: 10;
+  display: none;
+}
+
+.video-error.visible {
+  display: flex;
+}
+
+.video-error-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.video-error-message {
+  font-size: 18px;
+  max-width: 80%;
+  text-align: center;
+}
+
+.video-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 6;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Dark mode styles */
+:host(.dark-mode) {
+  background-color: #121212;
+}
+
+:host(.dark-mode) video {
+  background-color: #121212;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  :host {
+    aspect-ratio: auto;
+    height: 50vh;
+  }
+  
+  .center-play-button {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .center-play-button svg {
+    width: 30px;
+    height: 30px;
+  }
+} 

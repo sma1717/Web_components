@@ -1,0 +1,306 @@
+:host {
+  display: block;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: white;
+  font-family: Arial, sans-serif;
+  z-index: 10;
+}
+
+.video-controls {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+  padding: 10px;
+  transition: opacity 0.3s ease;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.left-controls {
+  display: flex;  
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.right-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-left: auto;
+}
+
+button {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: white;
+  border-radius: 4px;
+  vertical-align: middle;
+  overflow: visible;
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+button svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+}
+
+.volume-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.volume-slider-container {
+  position: relative;
+  width: 80px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.volume-slider {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: transparent; /* Make slider background transparent */
+  border-radius: 2px;
+  outline: none;
+  position: absolute;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  z-index: 3;
+}
+
+/* Volume level indicator */
+.volume-level {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%; /* Start with 0% width */
+  background-color: #ff0000;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.time-display {
+  margin-left: 8px;
+  color: white;
+  font-size: 14px;
+  min-width: 100px;  /* Prevent time display from shifting layout */
+}
+
+/* Progress bar styles */
+.progress-container {
+  position: relative;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: height 0.2s ease;
+}
+
+.progress-container:hover {
+  height: 8px;
+}
+
+.progress-bar {
+  position: absolute;
+  height: 100%;
+  background: #ff0000;
+  transition: width 0.1s ease;
+}
+
+.buffer-bar {
+  position: absolute;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.4);
+  transition: width 0.1s ease;
+}
+
+/* Playback rate menu */
+.playback-rate-menu {
+  position: relative;
+  margin-right: 8px;
+}
+
+.playback-rate-button {
+  color: white;
+  padding: 4px 8px;
+  min-width: 40px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.playback-rate-options {
+  position: absolute;
+  top: auto;
+  bottom: 40px; /* Position above the button */
+  right: 50px;
+  background: rgba(28, 28, 28, 0.9);
+  border-radius: 4px;
+  padding: 4px 0;
+  margin-bottom: 8px;
+  display: none;
+  z-index: 1000;
+  width: 100px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.playback-rate-options.visible {
+  display: block;
+}
+
+.rate-option {
+  padding: 4px 16px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.rate-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.rate-option.active {
+  color: #ff0000;
+}
+
+/* Dark mode styles */
+:host(.dark-mode) .controls-row {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+:host(.dark-mode) .progress-bar {
+  background: #ff0000;
+}
+
+:host(.dark-mode) .volume-slider::-webkit-slider-thumb {
+  background: #ff0000;
+}
+
+:host(.dark-mode) .volume-level {
+  background-color: #ff0000;
+}
+
+/* Control size and alignment for all icons */
+button svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* Play/pause button */
+.play-pause-button {
+  width: 40px;
+  height: 40px;
+}
+
+/* Skip buttons */
+.skip-backward-button, .skip-forward-button {
+  width: 40px;
+  height: 40px;
+}
+
+/* Volume control area */
+.volume-control {
+  display: flex;
+  align-items: center;
+  width: 100px;
+}
+
+.mute-button {
+  width: 30px;
+  height: 30px;
+}
+
+/* Fullscreen and dark mode buttons */
+.fullscreen-button, .dark-mode-button {
+  width: 40px;
+  height: 40px;
+}
+
+/* 10s time indicator text */
+text {
+  font-family: Arial, sans-serif;
+  font-size: 6px;
+  fill: currentColor;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .volume-slider {
+    width: 40px;
+  }
+  
+  .time-display {
+    min-width: 60px;
+    font-size: 10px;
+  }
+}
+
+.hover-time {
+  position: absolute;
+  top: -30px;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 100;
+  pointer-events: none;
+  white-space: nowrap;
+} 

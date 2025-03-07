@@ -1,0 +1,20 @@
+{
+  "name": "media-viewer",
+  "version": "1.0.0",
+  "description": "Modern media viewer for videos and images with Web Components",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "media",
+    "video",
+    "image",
+    "player",
+    "viewer",
+    "web-components"
+  ],
+  "author": "",
+  "license": "MIT"
+} 
