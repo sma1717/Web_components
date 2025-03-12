@@ -251,7 +251,6 @@ class ImageViewer extends MediaBase {
     `;
     
     this.shadowRoot.innerHTML = `
-      <style>${styles}</style>
       <div class="image-container">
         <img id="image" draggable="false">
         <div class="zoom-container">
@@ -288,9 +287,9 @@ class ImageViewer extends MediaBase {
       this.image.src = this._src;
     } else {
       // For local files served from our asset server
-      // Encode the filename to handle spaces and special characters
-      const encodedSrc = encodeURIComponent(this._src);
-      this.image.src = `http://localhost:1212/assets/images/${encodedSrc}`;
+      // Use the path as-is since it's already properly formatted in the media data
+      this.image.src = `http://localhost:1122${this._src}`;
+      console.log(`Loading image from: http://localhost:1122${this._src}`);
     }
     
     // Reset zoom and rotation when changing images

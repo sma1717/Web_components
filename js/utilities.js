@@ -114,8 +114,35 @@ const MediaViewerUtils = {
       document.body.classList.add('dark-mode');
     }
     return isDarkMode;
+  },
+  
+  // Add feature detection
+  featureSupport: {
+    webComponents: 'customElements' in window,
+    videoApi: 'HTMLVideoElement' in window,
+    localStorage: (() => {
+      try {
+        localStorage.setItem('test', 'test');
+        localStorage.removeItem('test');
+        return true;
+      } catch (e) {
+        return false;
+      }
+    })(),
+    
+    // Check if browser supports fullscreen API
+    fullscreen: document.documentElement.requestFullscreen || 
+               document.documentElement.webkitRequestFullscreen ||
+               document.documentElement.mozRequestFullScreen ||
+               document.documentElement.msRequestFullscreen,
+               
+    // Check for touch support
+    touch: 'ontouchstart' in window || navigator.maxTouchPoints > 0
   }
 };
+
+// Log feature support on initialization
+console.log('Browser feature support:', MediaViewerUtils.featureSupport);
 
 // Export for ES modules
 if (typeof module !== 'undefined' && module.exports) {

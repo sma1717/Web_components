@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Viewer - Project Review Guide</title>
+  <link rel="stylesheet" href="styles/main.css">
+  
+  <!-- Web Components polyfill for cross-browser compatibility -->
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script>
+    // Feature detection for Web Components
+    if (!('customElements' in window)) {
+      console.warn('Web Components not supported. Loading polyfills...');
+    }
+  </script>
+  <style>
+    .review-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .review-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .review-section h2 {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 10px;
+      margin-top: 0;
+    }
+    
+    .review-section h3 {
+      margin-top: 20px;
+      color: var(--text-color);
+    }
+    
+    .file-path {
+      font-family: monospace;
+      background-color: rgba(0,0,0,0.05);
+      padding: 2px 5px;
+      border-radius: 3px;
+      color: var(--primary-color);
+    }
+    
+    .code-block {
+      background-color: rgba(0,0,0,0.05);
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-family: monospace;
+      margin: 15px 0;
+    }
+    
+    .checklist {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    
+    .checklist li {
+      margin-bottom: 10px;
+      padding-left: 30px;
+      position: relative;
+    }
+    
+    .checklist li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+    
+    .file-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    
+    .file-list li {
+      margin-bottom: 15px;
+      padding-left: 20px;
+      border-left: 3px solid var(--primary-color);
+    }
+    
+    .file-list li strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .compatibility-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    
+    .compatibility-table th, .compatibility-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      text-align: left;
+    }
+    
+    .compatibility-table th {
+      background-color: rgba(0,0,0,0.05);
+    }
+    
+    .compatibility-table tr:nth-child(even) {
+      background-color: rgba(0,0,0,0.02);
+    }
+    
+    .note {
+      background-color: rgba(255, 217, 0, 0.1);
+      border-left: 4px solid #ffd900;
+      padding: 10px 15px;
+      margin: 15px 0;
+    }
+    
+    .important {
+      background-color: rgba(255, 59, 48, 0.1);
+      border-left: 4px solid #ff3b30;
+      padding: 10px 15px;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Project Review Guide</h1>
+      <div>
+        <a href="media-viewer-demo.html" class="about-link">Back to App</a>
+        <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
+      </div>
+    </header>
+    
+    <div class="review-container">
+      <div class="review-section">
+        <h2>Introduction</h2>
+        <p>This guide provides a structured approach to reviewing the Media Viewer project. It outlines the recommended order for examining files, key areas to focus on, and testing strategies to ensure cross-browser and cross-device compatibility.</p>
+        
+        <div class="note">
+          <strong>Note:</strong> This guide is intended for developers who are reviewing or contributing to the Media Viewer project. It assumes basic familiarity with Web Components, JavaScript, and modern web development practices.
+        </div>
+      </div>
+      
+      <div class="review-section">
+        <h2>1. Project Structure and Configuration</h2>
+        <p>Begin your review with these files to understand the project architecture:</p>
+        
+        <ul class="file-list">
+          <li>
+            <strong><span class="file-path">README.md</span></strong>
+            Provides an overview of the project structure, features, and setup instructions. Check that it accurately reflects the current state of the project.
+          </li>
+          <li>
+            <strong><span class="file-path">package.json</span></strong>
+            Contains project metadata, dependencies, and scripts. Verify that all dependencies are up-to-date and that scripts work as expected.
+          </li>
+          <li>
+            <strong><span class="file-path">server/server.js</span></strong>
+            Handles serving files and assets. Ensure the correct port (1122) is used consistently and that all file types are properly served.
+          </li>
+        </ul>
+        
+        <h3>Key Areas to Review:</h3>
+        <ul>
+          <li>Project organization and file structure</li>
+          <li>Dependencies and their versions</li>
+          <li>Server configuration and asset handling</li>
+          <li>Documentation accuracy and completeness</li>
+        </ul>
+      </div>
+      
+      <div class="review-section">
+        <h2>2. Core HTML and CSS</h2>
+        <p>Next, examine the main HTML and CSS files that define the application structure and styling:</p>
+        
+        <ul class="file-list">
+          <li>
+            <strong><span class="file-path">media-viewer-demo.html</span></strong>
+            The main application entry point. Review how components are declared, initialized, and connected.
+          </li>
+          <li>
+            <strong><span class="file-path">styles/main.css</span></strong>
+            Contains global styles and responsive design rules. Check media queries and dark mode implementation.
+          </li>
+          <li>
+            <strong><span class="file-path">about.html</span></strong>
+            The about page structure. Verify consistency with the main application styling.
+          </li>
+          <li>
+            <strong><span class="file-path">index.html</span></strong>
+            Simple redirect page. Ensure it correctly redirects to the main application.
+          </li>
+        </ul>
+        
+        <h3>HTML Review Checklist:</h3>
+        <ul class="checklist">
+          <li>Semantic HTML structure with appropriate tags</li>
+          <li>Proper component declarations and attributes</li>
+          <li>Correct script loading order</li>
+          <li>Accessibility features (ARIA attributes, alt text)</li>
+          <li>Meta tags for responsive design</li>
+          <li>Web Components polyfills for older browsers</li>
+        </ul>
+        
+        <h3>CSS Review Checklist:</h3>
+        <ul class="checklist">
+          <li>CSS variables for theming and consistency</li>
+          <li>Responsive design with appropriate breakpoints</li>
+          <li>Dark mode implementation</li>
+          <li>Mobile-friendly styles and touch targets</li>
+          <li>Cross-browser compatibility (vendor prefixes)</li>
+          <li>Performance considerations (avoid expensive selectors)</li>
+        </ul>
+      </div>
+      
+      <div class="review-section">
+        <h2>3. Utility and Data Files</h2>
+        <p>These files contain shared functionality used throughout the application:</p>
+        
+        <ul class="file-list">
+          <li>
+            <strong><span class="file-path">js/utilities.js</span></strong>
+            Common utility functions. Review for code quality, error handling, and browser compatibility.
+          </li>
+          <li>
+            <strong><span class="file-path">js/media-data.js</span></strong>
+            Data management for media items. Check data structure, filtering methods, and search functionality.
+          </li>
+        </ul>
+        
+        <h3>Key Functions to Review in utilities.js:</h3>
+        <ul>
+          <li><code>toggleDarkMode()</code> - Theme switching functionality</li>
+          <li><code>formatTime()</code> - Time formatting for video player</li>
+          <li><code>debounce()</code> - Performance optimization for event handlers</li>
+          <li><code>notifyMediaChanged()</code> - Event dispatching for media changes</li>
+          <li><code>featureSupport</code> - Browser feature detection</li>
+        </ul>
+        
+        <h3>Key Methods to Review in media-data.js:</h3>
+        <ul>
+          <li><code>getAllItems()</code> - Retrieves all media items</li>
+          <li><code>getItemsByCategory()</code> - Filters items by category</li>
+          <li><code>getItemsByType()</code> - Filters items by type</li>
+          <li><code>searchItems()</code> - Searches items by name or description</li>
+          <li><code>getItemById()</code> - Retrieves a specific item</li>
+        </ul>
+      </div>
+      
+      <div class="review-section">
+        <h2>4. Web Components</h2>
+        <p>Review the custom elements in the following order, which follows the dependency hierarchy:</p>
+        
+        <ol class="file-list">
+          <li>
+            <strong><span class="file-path">components/media-base/media-base.js</span></strong>
+            Base component that others extend. Check the core functionality and lifecycle methods.
+          </li>
+          <li>
+            <strong><span class="file-path">components/video-player/video-player.js</span></strong>
+            Core video playback functionality. Review video loading, playback controls, and event handling.
+          </li>
+          <li>
+            <strong><span class="file-path">components/video-controls/video-controls.js</span></strong>
+            UI controls for video playback. Check UI interactions, event handling, and mobile support.
+          </li>
+          <li>
+            <strong><span class="file-path">components/image-viewer/image-viewer.js</span></strong>
+            Image viewing functionality. Review image loading, zoom/pan features, and touch support.
+          </li>
+          <li>
+            <strong><span class="file-path">components/media-sidebar/media-sidebar.js</span></strong>
+            Navigation sidebar. Check item rendering, selection handling, and category management.
+          </li>
+          <li>
+            <strong><span class="file-path">components/right-click-menu/right-click-menu.js</span></strong>
+            Context menu functionality. Review menu positioning, item handling, and event management.
+          </li>
+          <li>
+            <strong><span class="file-path">components/shortcut-handler/shortcut-handler.js</span></strong>
+            Keyboard shortcuts. Check key mapping, event handling, and cross-browser compatibility.
+          </li>
+        </ol>
+        
+        <h3>Component Review Checklist:</h3>
+        <ul class="checklist">
+          <li>Proper lifecycle methods implementation (constructor, connectedCallback, disconnectedCallback)</li>
+          <li>Clean event handling with proper binding and removal</li>
+          <li>Shadow DOM usage and style encapsulation</li>
+          <li>Attribute handling and reactivity</li>
+          <li>Error handling and graceful degradation</li>
+          <li>Mobile and touch support</li>
+          <li>Performance considerations (debouncing, throttling)</li>
+          <li>Cross-browser compatibility and feature detection</li>
+        </ul>
+        
+        <div class="code-block">
+// Example of proper lifecycle methods and event handling
+connectedCallback() {
+  // Initialize only once
+  if (!this.initialized) {
+    this._initialize();
+    this.initialized = true;
+  }
+  
+  // Bind event handlers with proper context
+  this._onPlayClick = this._onPlayClick.bind(this);
+  
+  // Add event listeners
+  this._initializeEventListeners();
+}
+
+disconnectedCallback() {
+  // Clean up to prevent memory leaks
+  this._removeEventListeners();
+}
+        </div>
+      </div>
+      
+      <div class="review-section">
+        <h2>5. Cross-Browser & Cross-Device Compatibility</h2>
+        <p>Ensure the project works across all browsers and devices without functionality breakage, UI inconsistencies, or performance issues.</p>
+        
+        <h3>Browser Compatibility Matrix:</h3>
+        <table class="compatibility-table">
+          <tr>
+            <th>Feature</th>
+            <th>Chrome</th>
+            <th>Firefox</th>
+            <th>Safari</th>
+            <th>Edge</th>
+            <th>Mobile</th>
+          </tr>
+          <tr>
+            <td>Web Components</td>
+            <td>Native</td>
+            <td>Native</td>
+            <td>Native</td>
+            <td>Native</td>
+            <td>Polyfill</td>
+          </tr>
+          <tr>
+            <td>CSS Variables</td>
+            <td>Native</td>
+            <td>Native</td>
+            <td>Native</td>
+            <td>Native</td>
+            <td>Native</td>
+          </tr>
+          <tr>
+            <td>Video API</td>
+            <td>Full</td>
+            <td>Full</td>
+            <td>Partial</td>
+            <td>Full</td>
+            <td>Varies</td>
+          </tr>
+          <tr>
+            <td>Touch Events</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Primary</td>
+          </tr>
+          <tr>
+            <td>Fullscreen API</td>
+            <td>Standard</td>
+            <td>moz prefix</td>
+            <td>webkit prefix</td>
+            <td>Standard</td>
+            <td>Limited</td>
+          </tr>
+        </table>
+        
+        <h3>Key Compatibility Implementations:</h3>
+        <ul>
+          <li>Web Components polyfill for older browsers</li>
+          <li>Feature detection for APIs like Fullscreen and localStorage</li>
+          <li>Touch event support for mobile devices</li>
+          <li>Responsive design with mobile-specific styles</li>
+          <li>Vendor prefixes for browser-specific features</li>
+        </ul>
+        
+        <div class="important">
+          <strong>Important:</strong> Always test on real devices when possible, especially for touch interactions and mobile layouts. Browser emulators may not accurately represent the user experience.
+        </div>
+      </div>
+      
+      <div class="review-section">
+        <h2>6. Testing Checklist</h2>
+        <p>After reviewing the code, test the application with the following checklist:</p>
+        
+        <h3>Functional Testing:</h3>
+        <ul class="checklist">
+          <li>Video playback controls (play, pause, volume, seek)</li>
+          <li>Image viewer controls (zoom, rotate, pan)</li>
+          <li>Media selection and switching</li>
+          <li>Dark mode toggle</li>
+          <li>Search functionality</li>
+          <li>Keyboard shortcuts</li>
+          <li>Right-click menu</li>
+        </ul>
+        
+        <h3>Cross-Browser Testing:</h3>
+        <ul class="checklist">
+          <li>Chrome (latest)</li>
+          <li>Firefox (latest)</li>
+          <li>Safari (latest)</li>
+          <li>Edge (latest)</li>
+          <li>Older browser versions with polyfills</li>
+        </ul>
+        
+        <h3>Responsive Design Testing:</h3>
+        <ul class="checklist">
+          <li>Desktop (1920px+)</li>
+          <li>Laptop (1366px)</li>
+          <li>Tablet (768px)</li>
+          <li>Mobile (480px)</li>
+          <li>Different aspect ratios</li>
+        </ul>
+        
+        <h3>Mobile Device Testing:</h3>
+        <ul class="checklist">
+          <li>iOS Safari</li>
+          <li>Android Chrome</li>
+          <li>Touch interactions</li>
+          <li>Gesture support</li>
+          <li>Orientation changes</li>
+        </ul>
+        
+        <h3>Accessibility Testing:</h3>
+        <ul class="checklist">
+          <li>Keyboard navigation</li>
+          <li>Screen reader compatibility</li>
+          <li>Color contrast</li>
+          <li>Focus indicators</li>
+          <li>ARIA attributes</li>
+        </ul>
+        
+        <h3>Performance Testing:</h3>
+        <ul class="checklist">
+          <li>Initial load time</li>
+          <li>Media switching performance</li>
+          <li>Smooth animations and transitions</li>
+          <li>Memory usage over time</li>
+          <li>CPU usage during playback</li>
+        </ul>
+      </div>
+      
+      <div class="review-section">
+        <h2>7. Recent Changes and Improvements</h2>
+        <p>The following improvements have been made to enhance cross-browser and cross-device compatibility:</p>
+        
+        <h3>Port Number Standardization:</h3>
+        <ul>
+          <li>Updated all references from port 1212 to 1122</li>
+          <li>Affected files: video-player.js, image-viewer.js, server.js</li>
+        </ul>
+        
+        <h3>Web Components Compatibility:</h3>
+        <ul>
+          <li>Added polyfills for older browsers</li>
+          <li>Implemented feature detection</li>
+          <li>Added graceful degradation for unsupported features</li>
+        </ul>
+        
+        <h3>Mobile Enhancements:</h3>
+        <ul>
+          <li>Added touch event support for video controls</li>
+          <li>Improved touch targets for better usability</li>
+          <li>Enhanced responsive design for small screens</li>
+          <li>Optimized layout for mobile devices</li>
+        </ul>
+        
+        <h3>Performance Optimizations:</h3>
+        <ul>
+          <li>Implemented debouncing for event handlers</li>
+          <li>Added feature detection to avoid unnecessary polyfills</li>
+          <li>Improved event cleanup to prevent memory leaks</li>
+        </ul>
+        
+        <div class="code-block">
+// Example of touch event implementation
+this.progressContainer.addEventListener('touchstart', this._onProgressClick);
+this.progressContainer.addEventListener('touchmove', (e) => {
+  e.preventDefault(); // Prevent scrolling while seeking
+  this._onProgressHover(e.touches[0]);
+});
+this.progressContainer.addEventListener('touchend', this._onProgressLeave.bind(this));
+        </div>
+      </div>
+      
+      <div class="review-section">
+        <h2>8. Recommended Tools for Review</h2>
+        <p>The following tools can help with reviewing and testing the project:</p>
+        
+        <ul>
+          <li><strong>Browser DevTools:</strong> For inspecting components, debugging JavaScript, and testing responsive design</li>
+          <li><strong>Lighthouse:</strong> For performance, accessibility, and best practices audits</li>
+          <li><strong>Mobile Emulators:</strong> In Chrome DevTools for testing different device sizes and touch interactions</li>
+          <li><strong>BrowserStack or similar:</strong> For testing on multiple browsers and devices</li>
+          <li><strong>WebComponents.dev:</strong> For isolated testing of individual components</li>
+          <li><strong>axe DevTools:</strong> For accessibility testing</li>
+        </ul>
+        
+        <h3>DevTools Tips for Web Components:</h3>
+        <ul>
+          <li>Use the Elements panel to inspect Shadow DOM (look for #shadow-root nodes)</li>
+          <li>Set breakpoints in component lifecycle methods for debugging</li>
+          <li>Use the Network panel to monitor media loading</li>
+          <li>Test with throttled network and CPU to simulate slower devices</li>
+          <li>Use the Application panel to inspect localStorage for dark mode preference</li>
+        </ul>
+      </div>
+      
+      <div class="review-section">
+        <h2>Conclusion</h2>
+        <p>This review guide provides a structured approach to examining and testing the Media Viewer project. By following these guidelines, you can ensure that the application maintains high quality, cross-browser compatibility, and excellent user experience across all devices.</p>
+        
+        <p>Remember that web development is an iterative process. As browsers evolve and new devices emerge, the project will need ongoing updates and improvements to maintain compatibility and performance.</p>
+        
+        <a href="media-viewer-demo.html" class="back-button">Back to Media Viewer</a>
+      </div>
+    </div>
+    
+    <footer>
+      <p>&copy; 2025 Media Viewer</p>
+    </footer>
+  </div>
+  
+  <script src="js/utilities.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize dark mode
+      MediaViewerUtils.initDarkMode();
+      
+      // Set up dark mode toggle
+      const darkModeToggle = document.getElementById('dark-mode-toggle');
+      if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', () => {
+          MediaViewerUtils.toggleDarkMode();
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

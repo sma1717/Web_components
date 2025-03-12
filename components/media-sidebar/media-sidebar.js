@@ -104,7 +104,6 @@ class MediaSidebar extends HTMLElement {
       
       .sidebar-header {
         padding: 15px;
-        background-color: #fff;
         border-bottom: 1px solid #e0e0e0;
       }
       
@@ -117,23 +116,26 @@ class MediaSidebar extends HTMLElement {
       
       .sidebar-filter {
         padding: 10px 15px;
-        background-color: #fff;
         border-bottom: 1px solid #e0e0e0;
       }
       
       .filter-input {
-        width: 100%;
+        width: 90%;
         padding: 8px 10px;
         border: 1px solid #e0e0e0;
         border-radius: 4px;
         font-size: 14px;
         outline: none;
-        box-sizing: border-box;
+        background-color: var(--background-color);
+      }
+      
+      .filter-input:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
       }
       
       .sidebar-tabs {
         display: flex;
-        background-color: #fff;
         border-bottom: 1px solid #e0e0e0;
       }
       
@@ -143,128 +145,209 @@ class MediaSidebar extends HTMLElement {
         text-align: center;
         cursor: pointer;
         font-size: 14px;
-        transition: background-color 0.2s ease;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
       }
       
       .sidebar-tab:hover {
-        background-color: #f5f5f5;
+        background-color: #f9f9f9;
       }
       
       .sidebar-tab.active {
-        border-bottom: 2px solid #4285f4;
-        color: #4285f4;
+        border-bottom-color: #3498db;
+        color: #3498db;
+        font-weight: bold;
+      }
+      
+      .sidebar-content {
+        flex: 1;
+        overflow-y: auto;
+        background-color: #fff;
       }
       
       .media-list {
         list-style: none;
         margin: 0;
-        padding: 10px;
+        padding: 0;
         overflow-y: auto;
-        flex: 1;
+        height: calc(100% - 150px);  /* Account for header, filter, and tabs */
         max-height: 630px;
+      }
+      
+      .group-header {
+        padding: 12px 15px;
+        cursor: pointer;
+        border-bottom: 1px solid var(--border-color);
+        user-select: none;
+      }
+      
+      .group-header.type-group-header {
+        font-weight: bold;
+        font-size: 16px;
+        color: #333;
+        padding: 15px;
+        border-top: 1px solid var(--border-color);
+      }
+      
+      .group-header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .group-title {
+        flex: 1;
+      }
+      
+      .group-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease;
+      }
+      
+      .group-items {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      
+      .group-items.expanded {
+        max-height: 1000px;
       }
       
       .media-item {
         display: flex;
         align-items: center;
-        padding: 10px;
-        margin-bottom: 8px;
-        border-radius: 4px;
+        padding: 10px 15px;
+        border-bottom: 1px solid #e0e0e0;
         cursor: pointer;
         transition: background-color 0.2s ease;
-        background: rgba(255, 255, 255, 0.5);
       }
       
       .media-item:hover {
-        background-color: rgba(66, 133, 244, 0.1);
+        background-color: #f9f9f9;
       }
       
       .media-item.active {
-        background-color: rgba(66, 133, 244, 0.2);
-        border-left: 3px solid #4285f4;
+        background-color: #e1f0fa;
+        border-left: 4px solid #3498db;
       }
       
-      .media-icon {
-        width: 24px;
-        height: 24px;
-        margin-right: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .media-thumbnail {
+        width: 60px;
+        height: 40px;
+        margin-right: 10px;
+        object-fit: cover;
+        border-radius: 4px;
+        background-color: #eee;
       }
       
-      .media-details {
+      .media-info {
         flex: 1;
+        overflow: hidden;
       }
       
       .media-name {
-        font-size: 14px;
-        font-weight: 500;
+        font-weight: bold;
         margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       
-      .media-type {
+      .media-description {
         font-size: 12px;
         color: #666;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .media-type-icon {
+        margin-left: 10px;
+        color: #999;
       }
       
       .empty-message {
-        text-align: center;
         padding: 20px;
-        color: #666;
+        text-align: center;
+        color: #999;
         font-style: italic;
       }
       
       /* Dark mode styles */
-      :host(.dark-mode) {
-        color: #f5f5f5;
-        background-color: #1e1e1e;
+      :host([dark-mode]) {
+        color: #eee;
+        background-color: #222;
       }
       
-      :host(.dark-mode) .sidebar-header,
-      :host(.dark-mode) .sidebar-filter,
-      :host(.dark-mode) .sidebar-tabs {
+      :host([dark-mode]) .sidebar-header,
+      :host([dark-mode]) .sidebar-filter,
+      :host([dark-mode]) .sidebar-tabs,
+      :host([dark-mode]) .sidebar-content {
+        background-color: #333;
+        border-color: #444;
+      }
+      
+      :host([dark-mode]) .sidebar-title {
+        color: #eee;
+      }
+      
+      :host([dark-mode]) .filter-input {
+        background-color: #444;
+        border-color: #555;
+        color: #eee;
+      }
+      
+      :host([dark-mode]) .filter-input:focus {
+        border-color: #4dabf7;
+        box-shadow: 0 0 0 2px rgba(77, 171, 247, 0.2);
+      }
+      
+      :host([dark-mode]) .sidebar-tab {
+        color: #ddd;
+      }
+      
+      :host([dark-mode]) .sidebar-tab:hover {
+        background-color: #3a3a3a;
+      }
+      
+      :host([dark-mode]) .sidebar-tab.active {
+        border-bottom-color: #4dabf7;
+        color: #4dabf7;
+      }
+      
+      :host([dark-mode]) .group-header {
         background-color: #2a2a2a;
         border-color: #444;
+        color: #eee;
       }
       
-      :host(.dark-mode) .sidebar-title {
-        color: #f5f5f5;
-      }
-      
-      :host(.dark-mode) .filter-input {
-        background-color: #333;
+      :host([dark-mode]) .group-header.type-group-header {
+        background-color: #222;
+        color: #eee;
         border-color: #444;
-        color: #f5f5f5;
       }
       
-      :host(.dark-mode) .sidebar-tab:hover {
-        background-color: #333;
+      :host([dark-mode]) .media-item {
+        border-color: #444;
       }
       
-      :host(.dark-mode) .sidebar-tab.active {
-        border-color: #5c6bc0;
-        color: #5c6bc0;
+      :host([dark-mode]) .media-item:hover {
+        background-color: #3a3a3a;
       }
       
-      :host(.dark-mode) .media-item {
-        background: rgba(255, 255, 255, 0.05);
+      :host([dark-mode]) .media-item.active {
+        background-color: #2c3e50;
+        border-left-color: #4dabf7;
       }
       
-      :host(.dark-mode) .media-item:hover {
-        background-color: rgba(92, 107, 192, 0.2);
-      }
-      
-      :host(.dark-mode) .media-item.active {
-        background-color: rgba(92, 107, 192, 0.3);
-        border-left-color: #5c6bc0;
-      }
-      
-      :host(.dark-mode) .media-type {
+      :host([dark-mode]) .media-description {
         color: #aaa;
       }
       
-      :host(.dark-mode) .empty-message {
+      :host([dark-mode]) .empty-message {
         color: #aaa;
       }
     `;
@@ -434,18 +517,35 @@ class MediaSidebar extends HTMLElement {
     
     console.log('Rendering media items:', this._mediaItems.length, 'Active tab:', this._activeTab);
     
+    // Debug: Log all media items
+    console.log('All media items:', JSON.stringify(this._mediaItems.map(item => ({
+      id: item.id,
+      name: item.name,
+      type: item.type,
+      category: item.category
+    }))));
+    
     // Remove existing event listeners
     this._removeMediaItemListeners();
     
     // Filter media items based on active tab and search filter
     const filteredItems = this._mediaItems.filter(item => {
       // Filter by tab
-      if (this._activeTab !== 'all' && item.type !== this._activeTab) {
+      if (this._activeTab === 'wallpapers') {
+        // For wallpapers tab, only show items with category 'wallpapers'
+        if (item.category !== 'wallpapers') {
+          console.log(`Filtering out item ${item.id} because it's not in wallpapers category`);
+          return false;
+        }
+      } else if (this._activeTab !== 'all' && item.type !== this._activeTab) {
+        // For other tabs, filter by type
+        console.log(`Filtering out item ${item.id} because tab ${this._activeTab} doesn't match type ${item.type}`);
         return false;
       }
       
       // Filter by search text
       if (this._filter && !item.name.toLowerCase().includes(this._filter.toLowerCase())) {
+        console.log(`Filtering out item ${item.id} because filter ${this._filter} doesn't match name ${item.name}`);
         return false;
       }
       
@@ -453,6 +553,12 @@ class MediaSidebar extends HTMLElement {
     });
     
     console.log('Filtered items:', filteredItems.length);
+    console.log('Filtered items details:', JSON.stringify(filteredItems.map(item => ({
+      id: item.id,
+      name: item.name,
+      type: item.type,
+      category: item.category
+    }))));
     
     // Clear the list first
     this.mediaList.innerHTML = '';
@@ -463,102 +569,244 @@ class MediaSidebar extends HTMLElement {
       emptyMessage.className = 'empty-message';
       emptyMessage.textContent = 'No media items found';
       this.mediaList.appendChild(emptyMessage);
+    } else if (this._activeTab === 'wallpapers') {
+      // For wallpapers tab, display items in a simple list
+      console.log('Rendering wallpapers directly:', filteredItems.length);
+      
+      filteredItems.forEach(item => {
+        const li = document.createElement('li');
+        li.className = `media-item ${item.id === this._activeItemId ? 'active' : ''}`;
+        li.dataset.id = item.id;
+        
+        // Create thumbnail
+        const thumbnail = document.createElement('img');
+        thumbnail.className = 'media-thumbnail';
+        thumbnail.src = item.thumbnail || this._getDefaultThumbnail(item.type);
+        thumbnail.alt = item.name;
+        
+        // Create info container
+        const info = document.createElement('div');
+        info.className = 'media-info';
+        
+        // Create name
+        const name = document.createElement('div');
+        name.className = 'media-name';
+        name.textContent = item.name;
+        
+        // Assemble info
+        info.appendChild(name);
+        
+        // Assemble item
+        li.appendChild(thumbnail);
+        li.appendChild(info);
+        
+        // Add event listener
+        li.addEventListener('click', this._onMediaItemClick);
+        
+        this.mediaList.appendChild(li);
+      });
     } else {
-      // Group items by category
+      // Group items by type and then by category
       const groupedItems = this._groupItemsByCategory(filteredItems);
       
-      // Render each category
-      Object.keys(groupedItems).forEach(category => {
-        // Create category header
-        const categoryHeader = document.createElement('li');
-        categoryHeader.className = 'category-header';
-        categoryHeader.dataset.category = category;
+      // Render each group
+      Object.keys(groupedItems).forEach(group => {
+        const groupData = groupedItems[group];
+        
+        // Create group header
+        const groupHeader = document.createElement('li');
+        groupHeader.className = 'group-header';
+        groupHeader.dataset.group = group;
+        
+        // Add special class for type groups
+        if (groupData.isTypeGroup) {
+          groupHeader.classList.add('type-group-header');
+        }
         
         // Create header content
-        const headerContent = document.createElement('div');
-        headerContent.className = 'category-header-content';
         
         // Create header title
-        const headerTitle = document.createElement('span');
-        headerTitle.className = 'category-title';
-        headerTitle.textContent = this._formatCategoryName(category);
         
-        // Create toggle icon
-        const toggleIcon = document.createElement('span');
-        toggleIcon.className = 'category-toggle';
-        toggleIcon.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M7,15L12,10L17,15H7Z" fill="currentColor"/></svg>';
-        
-        // Assemble header
-        headerContent.appendChild(headerTitle);
-        headerContent.appendChild(toggleIcon);
-        categoryHeader.appendChild(headerContent);
-        
-        // Add click event listener
-        categoryHeader.addEventListener('click', this._onCategoryHeaderClick);
-        
-        // Add to list
-        this.mediaList.appendChild(categoryHeader);
-        
-        // Create category items container
-        const categoryItems = document.createElement('ul');
-        categoryItems.className = 'category-items expanded'; // Start expanded by default
-        
-        // Add items to category
-        groupedItems[category].forEach(item => {
-          const li = document.createElement('li');
-          li.className = `media-item ${item.id === this._activeItemId ? 'active' : ''}`;
-          li.dataset.id = item.id;
-          li.dataset.type = item.type;
-          li.dataset.category = item.category;
+        if (this._formatGroupName(group) ) {
           
-          const iconDiv = document.createElement('div');
-          iconDiv.className = 'media-icon';
-          iconDiv.innerHTML = this._getIconSvg(item.type);
+          const headerContent = document.createElement('div');
+          headerContent.className = 'group-header-content';
+
+          const headerTitle = document.createElement('span');
+          headerTitle.className = 'group-title';
+          headerTitle.textContent = this._formatGroupName(group);
+
+          // Create toggle icon
+          const toggleIcon = document.createElement('span');
+          toggleIcon.className = 'group-toggle';
+          toggleIcon.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M7,15L12,10L17,15H7Z" fill="currentColor"/></svg>';
           
-          const detailsDiv = document.createElement('div');
-          detailsDiv.className = 'media-details';
-          
-          const nameDiv = document.createElement('div');
-          nameDiv.className = 'media-name';
-          nameDiv.textContent = item.name;
-          
-          const typeDiv = document.createElement('div');
-          typeDiv.className = 'media-type';
-          typeDiv.textContent = this._getMediaTypeLabel(item.type);
-          
-          detailsDiv.appendChild(nameDiv);
-          detailsDiv.appendChild(typeDiv);
-          
-          li.appendChild(iconDiv);
-          li.appendChild(detailsDiv);
+          // Assemble header
+          headerContent.appendChild(headerTitle);
+          headerContent.appendChild(toggleIcon);
+          groupHeader.appendChild(headerContent);
           
           // Add click event listener
-          li.addEventListener('click', this._onMediaItemClick);
+          groupHeader.addEventListener('click', this._onCategoryHeaderClick);
           
-          categoryItems.appendChild(li);
-        });
+          // Add to list
+          this.mediaList.appendChild(groupHeader);
+          
+        }
+        // Skip rendering items for type groups (they're just headers)
+        if (groupData.isTypeGroup) {
+          return;
+        }
         
-        // Add category items to list
-        this.mediaList.appendChild(categoryItems);
+        // Create group items container
+        const groupItems = document.createElement('ul');
+        groupItems.className = 'group-items expanded'; // Start expanded by default
+        
+        // Add items to group
+        if (Array.isArray(groupData.items)) {
+          groupData.items.forEach(item => {
+            const li = document.createElement('li');
+            li.className = `media-item ${item.id === this._activeItemId ? 'active' : ''}`;
+            li.dataset.id = item.id;
+            
+            // Create thumbnail
+            const thumbnail = document.createElement('img');
+            thumbnail.className = 'media-thumbnail';
+            thumbnail.src = item.thumbnail || this._getDefaultThumbnail(item.type);
+            thumbnail.alt = item.name;
+            
+            // Create info container
+            const info = document.createElement('div');
+            info.className = 'media-info';
+            
+            // Create name
+            const name = document.createElement('div');
+            name.className = 'media-name';
+            name.textContent = item.name;
+            
+            // Create description
+            const description = document.createElement('div');
+            description.className = 'media-description';
+            description.textContent = item.description || '';
+            
+            // Assemble info
+            info.appendChild(name);
+            info.appendChild(description);
+            
+            // Create type icon
+            const typeIcon = document.createElement('div');
+            typeIcon.className = 'media-type-icon';
+            typeIcon.innerHTML = this._getIconSvg(item.type);
+            
+            // Assemble item
+            li.appendChild(thumbnail);
+            li.appendChild(info);
+            li.appendChild(typeIcon);
+            
+            // Add event listener
+            li.addEventListener('click', this._onMediaItemClick);
+            
+            groupItems.appendChild(li);
+          });
+        } else {
+          console.warn(`Group ${group} has no items array:`, groupData);
+        }
+        
+        // Add group items to list
+        this.mediaList.appendChild(groupItems);
       });
     }
   }
   
   /**
-   * Group items by category
+   * Group items by type and then by category
    */
   _groupItemsByCategory(items) {
     const grouped = {};
     
+    console.log('Grouping items by category:', items.length);
+    
+    // First group by type (videos, images)
+    const typeGroups = {
+      videos: [],
+      images: []
+    };
+    
     items.forEach(item => {
-      const category = item.category || 'uncategorized';
-      if (!grouped[category]) {
-        grouped[category] = [];
+      if (item.type && typeGroups[item.type] !== undefined) {
+        typeGroups[item.type].push(item);
+      } else {
+        // If type is not recognized, add to a default group
+        if (!typeGroups['other']) typeGroups['other'] = [];
+        typeGroups['other'].push(item);
       }
-      grouped[category].push(item);
+    });
+    
+    console.log('Type groups:', Object.keys(typeGroups).map(type => `${type}: ${typeGroups[type].length}`));
+    
+    // Then for each type, group by category
+    Object.keys(typeGroups).forEach(type => {
+      if (typeGroups[type].length > 0) {
+        const typeKey = `type-${type}`;
+        grouped[typeKey] = { 
+          isTypeGroup: true,
+          type: type,
+          items: []
+        };
+        
+        // Group items within this type by category
+        const categoryGroups = {};
+        typeGroups[type].forEach(item => {
+          const category = item.category || 'uncategorized';
+          if (!categoryGroups[category]) {
+            categoryGroups[category] = [];
+          }
+          categoryGroups[category].push(item);
+        });
+        
+        console.log(`Categories for ${type}:`, Object.keys(categoryGroups).map(cat => `${cat}: ${categoryGroups[cat].length}`));
+        
+        // Add category groups to the type group
+        Object.keys(categoryGroups).forEach(category => {
+          grouped[`${typeKey}-${category}`] = {
+            isTypeGroup: false,
+            type: type,
+            category: category,
+            items: categoryGroups[category]
+          };
+        });
+      }
     });
     
     return grouped;
+  }
+  
+  /**
+   * Format group name for display
+   */
+  _formatGroupName(group) {
+    if (!group) return 'Uncategorized';
+    
+    // Check if this is a type group
+    if (group.startsWith('type-')) {
+      const type = group.replace('type-', '');
+      return this._getMediaTypeLabel(type);
+    }
+    
+    // Check if this is a category within a type
+    if (group.includes('-')) {
+      const parts = group.split('-');
+      if (parts.length >= 3) {
+        const category = parts.slice(2).join('-');
+        return this._formatCategoryName(category);
+      }
+    }
+    
+    // Default formatting
+    return group
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   }
   
   /**
@@ -575,18 +823,18 @@ class MediaSidebar extends HTMLElement {
   }
   
   /**
-   * Handle category header click
+   * Handle group header click
    */
   _onCategoryHeaderClick(event) {
     const header = event.currentTarget;
-    const categoryItems = header.nextElementSibling;
+    const groupItems = header.nextElementSibling;
     
-    if (categoryItems && categoryItems.classList.contains('category-items')) {
+    if (groupItems && groupItems.classList.contains('group-items')) {
       // Toggle expanded state
-      const isExpanded = categoryItems.classList.toggle('expanded');
+      const isExpanded = groupItems.classList.toggle('expanded');
       
       // Update toggle icon
-      const toggleIcon = header.querySelector('.category-toggle');
+      const toggleIcon = header.querySelector('.group-toggle');
       if (toggleIcon) {
         toggleIcon.innerHTML = isExpanded
           ? '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M7,15L12,10L17,15H7Z" fill="currentColor"/></svg>'
@@ -629,7 +877,21 @@ class MediaSidebar extends HTMLElement {
       case 'images':
         return 'Image';
       default:
-        return 'File';
+        return '';
+    }
+  }
+  
+  /**
+   * Get default thumbnail for media type
+   */
+  _getDefaultThumbnail(type) {
+    switch (type) {
+      case 'videos':
+        return '/assets/thumbnails/video-default.jpg';
+      case 'images':
+        return '/assets/thumbnails/image-default.jpg';
+      default:
+        return '/assets/thumbnails/media-default.jpg';
     }
   }
   
@@ -658,7 +920,7 @@ class MediaSidebar extends HTMLElement {
   }
   
   setActiveTab(tab) {
-    if (['all', 'videos', 'images'].includes(tab)) {
+    if (['all', 'videos', 'images', 'wallpapers'].includes(tab)) {
       this._activeTab = tab;
       
       // Update UI

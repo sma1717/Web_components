@@ -126,7 +126,7 @@ class VideoPlayer extends HTMLElement {
       this.video.src = this._src;
     } else {
       // For local files served from our asset server
-      this.video.src = `http://localhost:1212/assets/videos/${this._src}.${this._format}`;
+      this.video.src = `http://localhost:1122/assets/videos/${this._src}.${this._format}`;
     }
     
     // Load the video

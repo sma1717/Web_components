@@ -5,45 +5,87 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Media Viewer Demo</title>
   <link rel="stylesheet" href="styles/main.css">
+  
+  <!-- Web Components polyfill for cross-browser compatibility -->
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script>
+    // Feature detection for Web Components
+    if (!('customElements' in window)) {
+      console.warn('Web Components not supported. Loading polyfills...');
+    }
+  </script>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>Media Viewer</h1>
-      <div>
-        <a href="about.html" class="about-link">About</a>
-        <button id="dark-mode-toggle" class="dark-mode-toggle">Toggle Dark Mode</button>
+      <div class="header-controls">
+        <button id="about-link" class="nav-button">
+          <a href="about.html" class="nav-link">About</a>
+        </button>
+        <button id="review-link" class="nav-button">
+          <a href="review.html" class="nav-link">Review Guide</a>
+        </button>
+        <button id="components-demo-link" class="nav-button">
+          <a href="component-demo.html" class="nav-link">Components Demo</a>
+        </button>
+        <button id="organize-media-btn" class="nav-button">Organize Media</button>
+        <dark-mode-toggle id="dark-mode-toggle" class="topbar"></dark-mode-toggle>
       </div>
     </header>
     
+    <div class="url-input-container">
+      <div class="input-group">
+        <input type="text" id="media-url-input" placeholder="Enter video or image URL" class="url-input">
+        <select id="media-type-select" class="media-type-select">
+          <option value="video">Video</option>
+          <option value="image">Image</option>
+        </select>
+        <button id="load-url-button" class="load-button">Load Media</button>
+      </div>
+    </div>
+    
     <div class="media-viewer-container">
-      <div class="sidebar-wrapper">
+      <div class="sidebar-container">
         <media-sidebar id="media-sidebar"></media-sidebar>
       </div>
       
-      <div class="viewer-wrapper">
-        <div class="media-container" id="media-container">
-          <!-- Pre-defined media components that will be shown/hidden as needed -->
-          <video-player id="video-player" style="display: none;">
-            <video-controls></video-controls>
-          </video-player>
-          <image-viewer id="image-viewer" style="display: none;"></image-viewer>
-        </div>
+      <div class="media-container" id="media-container">
+        <!-- Pre-defined media components that will be shown/hidden as needed -->
+        <video-player id="video-player" style="display: none;">
+          <video-controls></video-controls>
+        </video-player>
+        <image-viewer id="image-viewer" style="display: none;"></image-viewer>
       </div>
     </div>
     
     <footer>
-      <p>&copy; 2025 Media Viewer</p>
+      <p>&copy; 2025 Media Viewer. All rights reserved.</p>
     </footer>
   </div>
   
   <!-- Right-click menu component -->
-  <right-click-menu id="right-click-menu" target="#media-container > *"></right-click-menu>
+  <right-click-menu id="right-click-menu" target="#media-container"></right-click-menu>
   
   <!-- Shortcut handler component -->
   <shortcut-handler id="shortcut-handler" target="#video-player" skip-forward-seconds="10" skip-backward-seconds="10"></shortcut-handler>
   
-  <!-- Load components -->
+  <!-- Load utilities and services first -->
+  <script src="js/utilities.js"></script>
+  <script src="js/dark-mode-service.js"></script>
+  <script src="js/media-data.js"></script>
+  <script src="js/media-data-generated.js"></script>
+  
+  <!-- Load sub-components -->
+  <script src="components/play-pause-button/play-pause-button.js"></script>
+  <script src="components/volume-slider/volume-slider.js"></script>
+  <script src="components/seek-button/seek-button.js"></script>
+  <script src="components/speed-control/speed-control.js"></script>
+  <script src="components/seek-bar/seek-bar.js"></script>
+  <script src="components/fullscreen-button/fullscreen-button.js"></script>
+  <script src="components/dark-mode-toggle/dark-mode-toggle.js"></script>
+  
+  <!-- Load main components -->
   <script src="components/media-base/media-base.js"></script>
   <script src="components/video-player/video-player.js"></script>
   <script src="components/video-controls/video-controls.js"></script>
@@ -52,40 +94,50 @@
   <script src="components/right-click-menu/right-click-menu.js"></script>
   <script src="components/shortcut-handler/shortcut-handler.js"></script>
   
-  <!-- Load utilities and data -->
-  <script src="js/utilities.js"></script>
-  <script src="js/media-data.js"></script>
-  
   <script>
-    // Initialize the application
+    // Wait for the document to be fully loaded
     document.addEventListener('DOMContentLoaded', () => {
-      // Get references to elements
+      // Initialize dark mode service
+      if (window.darkModeService) {
+        darkModeService.initialize();
+      }
+      
+      // Get DOM elements
       const mediaSidebar = document.getElementById('media-sidebar');
-      const mediaContainer = document.getElementById('media-container');
       const videoPlayer = document.getElementById('video-player');
       const imageViewer = document.getElementById('image-viewer');
-      const darkModeToggle = document.getElementById('dark-mode-toggle');
       const rightClickMenu = document.getElementById('right-click-menu');
+      const mediaUrlInput = document.getElementById('media-url-input');
+      const mediaTypeSelect = document.getElementById('media-type-select');
+      const loadUrlButton = document.getElementById('load-url-button');
       const shortcutHandler = document.getElementById('shortcut-handler');
+      const mediaContainer = document.getElementById('media-container');
+      const organizeMediaBtn = document.getElementById('organize-media-btn');
       
-      // Initialize dark mode
-      const isDarkMode = MediaViewerUtils.initDarkMode();
-      
-      // Set up dark mode toggle
-      darkModeToggle.addEventListener('click', () => {
-        const isDarkMode = MediaViewerUtils.toggleDarkMode();
+      // Listen for dark mode changes
+      document.addEventListener('dark-mode-change', (e) => {
+        const { isDarkMode } = e.detail;
         
         // Update components
-        videoPlayer.setAttribute('dark-mode', isDarkMode.toString());
-        imageViewer.setAttribute('dark-mode', isDarkMode.toString());
-        mediaSidebar.setAttribute('dark-mode', isDarkMode.toString());
-        rightClickMenu.setAttribute('dark-mode', isDarkMode.toString());
-        shortcutHandler.setAttribute('dark-mode', isDarkMode.toString());
+        [mediaSidebar, videoPlayer, imageViewer].forEach(component => {
+          if (component) {
+            if (isDarkMode) {
+              component.setAttribute('dark-mode', '');
+            } else {
+              component.removeAttribute('dark-mode');
+            }
+          }
+        });
       });
       
+      // Use generated media data if available, otherwise use the default data
+      const mediaItems = window.MediaDataGenerated ? 
+        MediaDataGenerated.getAllItems() : 
+        MediaData.getAllItems();
+      
       // Set media items to sidebar
-      console.log('Setting media items to sidebar:', MediaData.getAllItems().length);
-      mediaSidebar.setMediaItems(MediaData.getAllItems());
+      console.log('Setting media items to sidebar:', mediaItems.length);
+      mediaSidebar.setMediaItems(mediaItems);
       
       // Listen for media selection
       mediaSidebar.addEventListener('media-selected', (event) => {
@@ -94,16 +146,83 @@
       });
       
       // Set right-click menu target
-      rightClickMenu.setAttribute('target', '#media-container > *');
+      rightClickMenu.setAttribute('target', '#media-container');
       
       // Load the first media item by default
-      const allItems = MediaData.getAllItems();
-      if (allItems.length > 0) {
+      if (mediaItems.length > 0) {
         setTimeout(() => {
-          console.log('Setting initial active media item:', allItems[0].id);
-          mediaSidebar.setActiveItem(allItems[0].id);
-          loadMediaItem(allItems[0]);
+          console.log('Setting initial active media item:', mediaItems[0].id);
+          mediaSidebar.setActiveItem(mediaItems[0].id);
+          loadMediaItem(mediaItems[0]);
         }, 300);
+      }
+      
+      // Add event listener for the load URL button
+      loadUrlButton.addEventListener('click', loadMediaFromUrl);
+      
+      // Add event listener for Enter key in the URL input
+      mediaUrlInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          loadMediaFromUrl();
+        }
+      });
+      
+      // Add event listener for organize media button
+      organizeMediaBtn.addEventListener('click', organizeMedia);
+      
+      // Function to organize media files
+      function organizeMedia() {
+        organizeMediaBtn.disabled = true;
+        organizeMediaBtn.textContent = 'Organizing...';
+        
+        fetch('/api/media/organize')
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert(`Media files organized successfully! Found ${data.mediaCount} media files.`);
+              // Reload the page to use the new media data
+              window.location.reload();
+            } else {
+              alert(`Error organizing media files: ${data.error}`);
+            }
+          })
+          .catch(error => {
+            console.error('Error organizing media:', error);
+            alert('Error organizing media files. Check console for details.');
+          })
+          .finally(() => {
+            organizeMediaBtn.disabled = false;
+            organizeMediaBtn.textContent = 'Organize Media';
+          });
+      }
+      
+      // Function to load media from URL
+      function loadMediaFromUrl() {
+        const url = mediaUrlInput.value.trim();
+        if (!url) {
+          alert('Please enter a valid URL');
+          return;
+        }
+        
+        const mediaType = mediaTypeSelect.value;
+        
+        // Create a temporary media item
+        const customMediaItem = {
+          id: 'custom-' + Date.now(),
+          name: 'Custom ' + (mediaType === 'video' ? 'Video' : 'Image'),
+          type: mediaType === 'video' ? 'videos' : 'images',
+          src: url,
+          thumbnail: mediaType === 'video' ? 'assets/thumbnails/video-default.jpg' : 'assets/thumbnails/image-default.jpg',
+          description: 'Custom media loaded from URL'
+        };
+        
+        // Load the custom media item
+        loadMediaItem(customMediaItem);
+        
+        // Notify that media has changed
+        document.dispatchEvent(new CustomEvent('media-changed', { 
+          detail: { mediaItem: customMediaItem }
+        }));
       }
       
       // Function to load a media item
@@ -122,13 +241,8 @@
             videoPlayer.setAttribute('format', item.format);
           }
           
-          // Set dark mode if active
-          if (document.body.classList.contains('dark-mode')) {
-            videoPlayer.setAttribute('dark-mode', 'true');
-          }
-          
           // Show the video player
-          videoPlayer.style.display = 'block';
+          videoPlayer.style.display = 'flex';
           
           // Update shortcut handler and right-click menu targets
           shortcutHandler.setAttribute('target', '#video-player');
@@ -143,13 +257,8 @@
             imageViewer.setAttribute('alt', item.alt);
           }
           
-          // Set dark mode if active
-          if (document.body.classList.contains('dark-mode')) {
-            imageViewer.setAttribute('dark-mode', 'true');
-          }
-          
           // Show the image viewer
-          imageViewer.style.display = 'block';
+          imageViewer.style.display = 'flex';
           
           // Update shortcut handler and right-click menu targets
           shortcutHandler.setAttribute('target', '#image-viewer');
@@ -157,8 +266,18 @@
           console.log('Updated targets for image viewer');
         }
         
+        // Apply dark mode if active
+        if (window.darkModeService && window.darkModeService.isDarkMode()) {
+          videoPlayer.setAttribute('dark-mode', '');
+          imageViewer.setAttribute('dark-mode', '');
+        }
+        
         // Notify that media has changed
-        MediaViewerUtils.notifyMediaChanged(item);
+        const event = new CustomEvent('media-changed', {
+          bubbles: true,
+          detail: item
+        });
+        mediaContainer.dispatchEvent(event);
       }
     });
   </script>
